@@ -139,7 +139,93 @@ window.onload = function(){
                         html+="</div>";
                     html+="</div>";
 
+                    html+= "<div id='event_list_container' >";
+                    html += "<div id='event_list_header'>" + "Event List</div><div id='event_list_body'>"+
+                    "<div class='eventTable'><table id='eventTable' class = 'table table-bordered data-table'>"+"<thead style='text-align: center;'>"+"<th style='width: 18%;'>Name</th>"+
+                                "<th style='width: 30%;'>Location</th>"+"<th style='width: 23%;'>Start Time</th>"+"<th style='width: 23%;'>End Time</th>" +"<th style='width: 35%;'>Edit</th>"+"</thead>" +"<tbody>";
+                                html+="</tbody>";
+                            html+="</table>";
+                        html+= "</div>";
+                    html+= "</div>";
+                html+= "</div>";
+
                     $('#main').html(html);
+                    for(let i = 0; i<trip$.events.length; i++){   
+                        $(".data-table tbody").append("<tr event-name='"+trip$.events[i].name+"' event-loc ='"+trip$.events[i].location+"'event-start = '"+trip$.events[i].start+
+                        "' event-end='"+trip$.events[i].end+"'><td>"+trip$.events[i].name+"</td><td>"+trip$.events[i].location+"</td><td>"+trip$.events[i].start+"</td><td>"+trip$.events[i].end+"</td><td><button class='btn btn-danger btn-lg btn-delete mr-3' type ='button'>Delete</button><button class='btn btn-info btn-lg btn-edit' type ='button'>Edit</button></td></tr>");
+                    }
+                    $('#makeNewEvent').click(function(){
+                        let eventName = $('#newEventName').val();
+                        let eventLoc = $('#newEventLocation').val();
+                        let eventStart = $('#newEventStart').val();
+                        let eventEnd = $('#newEventEnd').val();
+                        
+                        let newEventEntry = {
+                            name: eventName,
+                            location: eventLoc,
+                            start: eventStart, 
+                            end: eventEnd,
+                        }
+                        let eventConflict = false;
+                        for (let i = 0; i < trip$.events.length; i++) {
+                            if (eventName == trip$.events[i].name || eventStart == trip$.events[i].start){
+                                alert("Event Conflict!");
+                                eventConflict = true;
+                            }
+                        }
+                        if (!eventConflict) {
+                        trip$.events.push(newEventEntry);
+                    $.ajax({
+                        type:'PATCH',
+                        url:'/trips/'+trip$._id,
+                        contentType:'application/json',
+                        dataType:'json',
+                        data:JSON.stringify({events:trip$.events}),
+                        success: function(data){
+                            localStorage.selected = JSON.stringify(trip$);
+                            location.reload();
+                            
+                        }
+        
+                    });
+                        }
+                    });
+
+                    $('body').on('click', '.btn-delete', function() {
+                        let eventToDel = $(this).parents('tr').attr('event-name');
+                        var nameFound = false;
+                        let index = 0;
+                        $(this).parents('tr').remove();
+
+                        for (let i = 0; i < trip$.events.length; i++) {
+                            if (trip$.events[i].name == eventToDel);
+                            index = i;
+                            nameFound = true;
+                            break;
+                        }
+                        if (nameFound) {
+                            trip$.events.splice(index, 1);
+                            
+                            $.ajax({
+                                type:'PATCH',
+                                url:'/trips/'+trip$._id,
+                                contentType:'application/json',
+                                dataType:'json',
+                                data:JSON.stringify({events:trip$.events}),
+                                success: function(data){
+                                    localStorage.selected = JSON.stringify(trip$);
+                                    location.reload();
+                                    
+                                }
+                
+                            });
+                        }
+
+                    });
+
+                    $('body').on('click', '.btn-edit', function() {
+                        
+                    });
 
                     var optionsEstablishments = {
                         types: ['establishment']
