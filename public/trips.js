@@ -229,6 +229,10 @@ window.onload = function(){
         }
     });
 
+    var options = {
+        types: ['(cities)']
+    }
+
     $('#makeNewTrip').click(function(){
         let html = "";
         html+="<div id='newTripMain'>"+
@@ -239,6 +243,9 @@ window.onload = function(){
                 "<label>Budget Minimum:</label><input type=number id='budMin'>"+
                 "<label>Budget Maximum:</label><input type=number id='budMax'>"+
             "</div>";
+            
+            
+
             html+="<div id='invites'>"+
                 "<h2>Invite Friends</h2>";
             for(let i = 0; i<user.friends.length; i++){
@@ -260,7 +267,11 @@ window.onload = function(){
 
         "</div>";
         $("#main").html(html);
-
+        var input1 = document.getElementById("home");
+        var autocomplete1 = new google.maps.places.Autocomplete(input1, options);
+    
+        var input2 = document.getElementById("destination");
+        var autocomplete2 = new google.maps.places.Autocomplete(input2, options);
         $('#cancel').click(function(){
             location.reload();
         });
@@ -305,4 +316,7 @@ window.onload = function(){
     
         
     })
+    
+
+    
 }
