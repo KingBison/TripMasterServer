@@ -1,0 +1,68 @@
+#newTrip{
+    margin-top: 90px;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: center;
+    background-color: white;
+    font-size: 32px;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+#newTrip div button{
+    font-size: 32px;
+    margin:20px;
+    height:60%;
+    width:60%;
+    background-color: white;
+    color:black;
+}
+
+#main{
+    margin-top: 30px;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: center;
+    background-color: white;
+    font-size: 32px;
+}
+
+#newTripMain{
+    display: grid;
+    grid-template-columns:33% 34% 33%;
+}
+
+#specs{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+#specs label,input{
+    font-size: 22px;
+    margin:10px;
+}
+
+.invite label,input{
+    font-size: 22px;
+    margin:10px;
+}
+
+h2{
+    font-size: 32px;
+}
+
+#buttons{
+    display: grid;
+    grid-template-rows: 20% 20% 20% 20% 20%;
+}
+#buttons button{
+    width:80%;
+}
+
+#cancel{
+    background-color: red;
+}
+
+#create{
+    background-color: green;
+}

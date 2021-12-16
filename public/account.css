@@ -1,0 +1,70 @@
+#main{
+    margin-top: 90px;
+    margin-left: 25%;
+    margin-right: 25%;
+    background-color: white;
+    border-radius: 15px;
+}
+
+.tabco{
+    text-align: center;
+}
+
+.tab{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+ul{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    text-align: center;
+    list-style: none;
+}
+
+ul li{
+    margin: 15px;
+}
+
+
+ul li a{
+    padding: 8px;
+    text-decoration: none;
+    border: 2px solid black;
+    border-radius: 15px;;
+    color: black;
+    font-size: 32px;
+}
+
+ul li a:hover{
+    color:white;
+    background-color: black;
+}
+
+input, label {
+    margin:10px;
+    font-size: 26px;
+    
+}
+
+label{
+    font-size: 32px;
+    text-align: right;
+}
+
+button{
+    background-color: white;
+    color: black;
+    font-size: 32px;
+    text-align: center;
+    margin: 10px;
+}
+
+#accountinfo{
+    margin-left: 10%;
+    margin-right: 10%;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    margin-top: 90px;
+    background-color: white;
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset="utf-8">
+        <link rel='stylesheet' href='all.css'>
+        <link rel='stylesheet' href='account.css'>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"   integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="   crossorigin="anonymous"></script>
+        <script
+            src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"
+            integrity="sha256-xH4q8N0pEzrZMaRmd7gQVcTZiFei+HfRTBPJ1OGXC0k="
+            crossorigin="anonymous">
+        </script>
+        <script src='account.js'></script>
+    </head>
+    <body>
+        <div id='nav_bar'>
+            <div><a class='nav' href='/'>Home</a></div>
+            <div id='trips'></div>
+            <div id='friends'></div>
+            <div><a class='nav' href='account.html'>Login</a></div>
+        </div>
+        <div id='main'>
+            <ul>
+                <li><a href='#t1'>Login</a></li>
+                <li><a href='#t2'>Sign Up</a></li>
+            </ul>
+            <div id='t1' class='tabco'>
+                <div class='tab'>
+                    <label>Email:</label><input type='email' id='lemail'>
+                    <label>Password:</label><input type='password' id='lpassword'>
+                </div>
+                <button id='login'>Login</button>
+            </div>
+            <div id='t2' class='tabco'>
+                <div class='tab'>
+                    <label>First Name:</label><input type='text' id='firstName'>
+                    <label>Last Name:</label><input type='text' id='lastName'>
+                    <label>Email:</label><input type='email' id='email'>
+                    <label>Password:</label><input type='password' id='password'>
+                    <label>Confirm Password:</label><input type='password' id='password2'>
+                </div>
+                <button id='signup'>SignUp</button>
+            </div>
+            
+        </div>
+        <div id='accountinfo'>
+            <br><label>Email:</label><h3 id='em'></h3><button id='logout'>Logout</button>
+            <label>First Name:</label><h3 id='fn'></h3><input type='text' id='CfirstName'><button id='changeFN'>Change</button>
+            <label>Last Name:</label><h3 id='ln'></h3><input type='text' id='ClastName'><button id='changeLN'>Change</button>
+            <label>Password:</label><h3 id='pw'></h3><input type='password' id='Cpassword'><button id='changePW'>Change</button>
+
+        </div>
+    </body>
+</html>

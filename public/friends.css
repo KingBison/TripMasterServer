@@ -1,0 +1,50 @@
+#addFriends{
+    margin-top: 90px;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    background-color: white;
+}
+
+#addFriends input, button{
+    margin:20px;
+    font-size: 32px;;
+}
+
+#addFriends button{
+    background-color: white;
+    color: black;
+}
+
+#allfriends{
+    margin-top: 30px;
+    margin-left: 20%;
+    margin-right: 20%;
+    background-color: white;
+}
+
+#noFriendsMessage{
+    font-size: 42px;
+    text-align: center;
+    padding: 24px;
+}
+
+.friend{
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
+
+.friendInfo{
+    display: grid;
+    grid-template-rows: 50% 50%;
+}
+
+h1, h2{
+    padding:10px;
+
+}
+
+.friend button{
+    background-color: red;
+}
