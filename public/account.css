@@ -68,3 +68,16 @@ button{
     margin-top: 90px;
     background-color: white;
 }
+
+.COMPLETE{
+    margin-top: 30px;
+    background-color: white;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding: 20px;
+    text-align: center;
+}
+
+.NAME{
+    font-size: 42px;
+}

@@ -14,8 +14,8 @@ window.onload = function(){
             let tripsOn = [];
             for(let i = 0; i<data.length; i++){
                 for(let k = 0; k<data[i].participants.length; k++){
-                    console.log('11')
-                    if(user.email == data[i].participants[k].email){
+                    
+                    if(user.email == data[i].participants[k].email && data[i].completed == false){
                         console.log(data[i]);
                         tripsOn.push(i);
                     }
@@ -164,6 +164,116 @@ window.onload = function(){
                         location.reload();
                     });
 
+                    $('#complete').click(function(){
+
+                        var people = [];
+                        for(let i = 0; i<trip$.finances.length; i++){
+                            
+                            for(let k = 0; k<trip$.finances[i].people.length; k++){
+                                if(!people.includes(trip$.finances[i].people[k].person.firstName)){
+                                    people.push(trip$.finances[i].people[k].person.firstName);
+                                }
+                            }
+                            if(!people.includes(trip$.finances[i].payer.firstName)){
+                                people.push(trip$.finances[i].payer.firstName);
+                            }
+                        }
+
+                        let CF = []
+
+                        for(let i = 0; i<people.length; i++){
+                            for(let k = i+1; k<people.length; k++){
+                                CF.push({
+                                    p1: people[i],
+                                    p2: people[k],
+                                    net: 0
+                                });
+
+                                
+                            }
+                        }
+
+                        for(let i = 0; i<trip$.finances.length; i++){
+                            
+                            for(let k = 0; k<trip$.finances[i].people.length; k++){
+                                
+                                for(let j = 0; j<CF.length; j++){
+                                    if(CF[j].p1 == trip$.finances[i].people[k].person.firstName && CF[j].p2 == trip$.finances[i].payer.firstName){
+                                        CF[j].net -= trip$.finances[i].people[k].owes;
+                                        console.log(trip$.finances[i].people[k].person.owes);
+                                        
+                                    }
+                                    if(CF[j].p2 == trip$.finances[i].people[k].person.firstName && CF[j].p1 == trip$.finances[i].payer.firstName){
+                                        CF[j].net += trip$.finances[i].people[k].owes;
+                                    }
+                                }
+                            }
+                            
+                        }
+
+
+
+
+
+                        console.log(CF);
+
+                        
+
+
+                        let html="";
+                        html+="<div id='COMPLETE'>";
+
+
+                            html+="<div class='NAME'>"+trip$.name+"</div>";
+                            html+="<div id='financialEntries'>";
+                                html+="<div class='title'>Finance History</div>";
+
+                                if(trip$.finances.length == 0){
+                                    html+="<div id='noMoney'>You have no financial entries</div>";
+
+                                } else {
+                                    for(let i = 0; i<trip$.finances.length; i++){
+                                        for(let k = 0; k<trip$.finances[i].people.length; k++){
+                                            html+="<div class='entry'>"+
+                                                "<div>"+trip$.finances[i].people[k].person.firstName+ " owes " + trip$.finances[i].payer.firstName + " $" + trip$.finances[i].people[k].owes + " for " + trip$.finances[i].people[k].reason + "</div>" +
+                                            "</div>";
+                                        }
+                                    }
+                                }
+                            html+="</div><hr>";
+                            for(let i = 0; i<CF.length; i++){
+                                if(CF[i].net<0){
+                                    html+="<div>" + CF[i].p1 + " owes " + CF[i].p2 + " $" + CF[i].net*-1 + "</div>";
+                                }
+                                if(CF[i].net>0){
+                                    html+="<div>" + CF[i].p2 + " owes " + CF[i].p1 + " $" + CF[i].net + "</div>";
+                                }
+
+                            }
+
+                            trip$.completed = true; 
+                            $.ajax({
+                                type:'PATCH',
+                                url:'/trips/'+trip$._id,
+                                contentType:'application/json',
+                                dataType:'json',
+                                data:JSON.stringify({completed:trip$.completed}),
+                                success: function(data){
+
+                                    localStorage.removeItem('selected');
+                                    
+                                }
+                
+                            });
+
+
+                            
+
+                        html+="</div>";
+
+                        $('#main').html(html);
+                    });
+
                     $('#makeNewFinance').click(function(){
                         let newFinancialEntry = {
                             payer: {
@@ -179,7 +289,7 @@ window.onload = function(){
                                     person: user.friends[i],
                                     amount: $('#bill').val(),
                                     reason: $('#bill_desc').val(),
-                                    owes: $('#owes-' + i).val()
+                                    owes: Number($('#owes-' + i).val())
                                 })
                             
                             

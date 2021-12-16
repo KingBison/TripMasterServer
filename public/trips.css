@@ -169,3 +169,10 @@ h2{
     grid-template-columns: 50% 50%;
 }
 
+#COMPLETE{
+    background-color: white;
+}
+
+.NAME{
+    font-size: 52px;
+}

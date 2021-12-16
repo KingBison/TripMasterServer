@@ -3,6 +3,116 @@ window.onload = function(){
     if('user' in localStorage){
 
 
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: '/trips',
+            success: function(data){
+                let html="";
+                for(let i = 0; i<data.length; i++){
+                    for(let k = 0; k<data[i].participants.length; k++){
+                        
+                        if(user.email == data[i].participants[k].email && data[i].completed == true){
+                            var trip$ = data[i];
+                            var people = [];
+                            for(let i = 0; i<trip$.finances.length; i++){
+                                
+                                for(let k = 0; k<trip$.finances[i].people.length; k++){
+                                    if(!people.includes(trip$.finances[i].people[k].person.firstName)){
+                                        people.push(trip$.finances[i].people[k].person.firstName);
+                                    }
+                                }
+                                if(!people.includes(trip$.finances[i].payer.firstName)){
+                                    people.push(trip$.finances[i].payer.firstName);
+                                }
+                            }
+
+                            let CF = []
+
+                            for(let i = 0; i<people.length; i++){
+                                for(let k = i+1; k<people.length; k++){
+                                    CF.push({
+                                        p1: people[i],
+                                        p2: people[k],
+                                        net: 0
+                                    });
+
+                                    
+                                }
+                            }
+
+                            for(let i = 0; i<trip$.finances.length; i++){
+                                
+                                for(let k = 0; k<trip$.finances[i].people.length; k++){
+                                    
+                                    for(let j = 0; j<CF.length; j++){
+                                        if(CF[j].p1 == trip$.finances[i].people[k].person.firstName && CF[j].p2 == trip$.finances[i].payer.firstName){
+                                            CF[j].net -= trip$.finances[i].people[k].owes;
+                                            console.log(trip$.finances[i].people[k].person.owes);
+                                            
+                                        }
+                                        if(CF[j].p2 == trip$.finances[i].people[k].person.firstName && CF[j].p1 == trip$.finances[i].payer.firstName){
+                                            CF[j].net += trip$.finances[i].people[k].owes;
+                                        }
+                                    }
+                                }
+                                
+                            }
+
+
+
+
+
+                            console.log(CF);
+
+                            
+
+
+                            
+                            html+="<div class='COMPLETE'>";
+
+
+                                html+="<div class='NAME'>"+trip$.name+"</div>";
+                                html+="<div id='financialEntries'>";
+                                    html+="<div class='title'>Finance History</div>";
+
+                                    if(trip$.finances.length == 0){
+                                        html+="<div id='noMoney'>You have no financial entries</div>";
+
+                                    } else {
+                                        for(let i = 0; i<trip$.finances.length; i++){
+                                            for(let k = 0; k<trip$.finances[i].people.length; k++){
+                                                html+="<div class='entry'>"+
+                                                    "<div>"+trip$.finances[i].people[k].person.firstName+ " owes " + trip$.finances[i].payer.firstName + " $" + trip$.finances[i].people[k].owes + " for " + trip$.finances[i].people[k].reason + "</div>" +
+                                                "</div>";
+                                            }
+                                        }
+                                    }
+                                html+="</div><hr>";
+                                for(let i = 0; i<CF.length; i++){
+                                    if(CF[i].net<0){
+                                        html+="<div>" + CF[i].p1 + " owes " + CF[i].p2 + " $" + CF[i].net*-1 + "</div>";
+                                    }
+                                    if(CF[i].net>0){
+                                        html+="<div>" + CF[i].p2 + " owes " + CF[i].p1 + " $" + CF[i].net + "</div>";
+                                    }
+
+                                }
+
+
+                                
+
+                            html+="</div>";
+
+                            
+                            }
+                    }
+                }
+                $('#pastTrips').html(html);
+            }
+        });
+
+
         $('#trips').html("<a class='nav' href=trips.html>Trips</a>");
         $('#friends').html("<a class='nav' href=friends.html>Friends</a>");
 
