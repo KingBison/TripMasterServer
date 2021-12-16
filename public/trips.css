@@ -91,3 +91,57 @@ h2{
 .remove{
     background-color: red;
 }
+
+#EDIT{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+
+
+#left, #right{
+    margin:15px;
+    padding: 15px;
+    background-color: white;
+    
+}
+
+
+
+
+#noFriends{
+    min-height: 400px;
+}
+
+.title{
+    font-size: larger;
+    margin-bottom: 10px;
+}
+
+.alterFriend{
+    padding: 5px;
+    border: 2px solid black;
+    display: grid;
+    grid-template-columns: 60% 20% 20%;
+}
+
+.alterFriend button{
+    margin: 5px;
+}
+
+.addP{
+    background-color: green;
+}
+
+.removeP{
+    background-color: red;
+}
+
+.person{
+    display: grid;
+    grid-template-columns: 40% 30% 30%;
+}
+
+#newFinancialEntry label, div{
+    font-size: 20px;;
+}

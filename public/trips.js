@@ -14,7 +14,9 @@ window.onload = function(){
             let tripsOn = [];
             for(let i = 0; i<data.length; i++){
                 for(let k = 0; k<data[i].participants.length; k++){
+                    console.log('11')
                     if(user.email == data[i].participants[k].email){
+                        console.log(data[i]);
                         tripsOn.push(i);
                     }
                 }
@@ -23,43 +25,205 @@ window.onload = function(){
             if(tripsOn.length == 0){
                 $('#main').html("<div id='noTrips'>You have not made any trips</div>");
             } else {
-                let html = "<div id='allTrips'>";
-                for(let i = 0; i<tripsOn.length; i++){
-                    html+="<div class='trip'>"+
-                        "<div class='tripName'>" + data[i].name + "</div>"+
-                        "<button class='edit' id='edit-" + i + "' class='editButton'>Edit</button>"+
-                        "<div class='destinationName'>" + data[i].destination + "</div>"+
-                        "<button class='remove' id='remove-" + i + "' class='removeButton'>Remove</button>"+
-                    "</div>";
-                    
-                } 
-                html+="</div>"
-                $('#main').html(html);
 
-                $('.trip').each(function(index){
-                    $("#remove-" + index).click(function(){
-                        console.log(data[tripsOn[index]].participants.length);
-                        for(let i = 0; i<data[tripsOn[index]].participants.length; i++){
-                            if(data[tripsOn[index]].participants[i].email == user.email){
-                                console.log(data[tripsOn[index]].participants[i].email);
-                                console.log(user.email);
-                                data[tripsOn[index]].participants.splice(i,1);
+                if('selected' in localStorage){
+                    let html="";
+                    var trip$ = JSON.parse(localStorage.selected);
+                    document.getElementById('main').style.backgroundColor = "transparent";
+                    html+="<div id='EDIT'>"+
+                        "<div id='left'>";
+                        if(user.friends.length == 0){
+                            html+="<div id='noFriends'>You Have No Friends</div>"; 
+                        } else {
+                            html+="<div id='participants'>"+
+                            "<div class='title'>Friends</div>";
+                                //participants
+
+                            console.log(user.friends.length);
+                            for(let i = 0; i<user.friends.length; i++){
+                                
+                                html+="<div class='alterFriend'>"+
+                                    "<div class='friendName'>" + user.friends[i].firstName + " " + user.friends[i].lastName + "</div>"+
+                                    "<button id='addP-" + i + "'>Add</button>"+
+                                    "<button id='removeP-" + i + "'>Remove</button>"+
+                                "</div>";
+
                             }
+                            html+="</div><hr>";
+                                    
                         }
-                        $.ajax({
-                            type:'PATCH',
-                            url:'/trips/'+data[tripsOn[index]]._id,
-                            contentType:'application/json',
-                            dataType:'json',
-                            data:JSON.stringify({participants:data[tripsOn[index]].participants}),
-                            success: function(data){
-                                location.reload();
+
+                            html+="<div id='financialEntries'>";
+                                html+="<div class='title'>Finance History</div>";
+
+                                if(trip$.finances.length == 0){
+                                    html+="<div id='noMoney'>You have no financial entries</div>";
+
+                                } else {
+
+                                }
+                            html+="</div><hr>";
+
+                            html+="<div id='newFinancialEntry'>";
+                                html+="<label>How much did I pay?</label><input type=number id='bill'><br>"+
+                                "<label>What was it for?</label><input type=text id='bill_desc'><br>";
+
+                                let active = [];
+                                for(let i = 0; i<user.friends.length; i++){
+                                    for(let k = 0; k<trip$.participants.length; k++){
+                                        if(user.friends[i].email == trip$.participants[k].email){
+                                            active.push(i);
+                                        }
+                                        
+                                    }
+                                }
+                                
+                                for(let i = 0; i<active.length; i++){
+                                    html+="<div class='person'>"+
+                                        "<div>"+user.friends[i].firstName + " " + user.friends[i].lastName + "</div>"+
+                                        "<div>owes</div>"+
+                                        "<input type=number id='owes-" + i + "'>"+
+
+                                    "</div>";
+                                    
+                        
+                                    
+                                }
+                                
+
+                            html+="</div>";
+                                
+                                
+                        html+="</div>";
+                        html+="<div id='right'>";
+                        html+="</div>";
+                    html+="</div>";
+
+                    $('#main').html(html);
+
+                    $('.alterFriend').each(function(index){
+                        
+                        let active = [];
+                        for(let i = 0; i<user.friends.length; i++){
+                            for(let k = 0; k<trip$.participants.length; k++){
+                                if(user.friends[i].email == trip$.participants[k].email){
+                                    active.push(i);
+                                }
                                 
                             }
-            
-                        });
+                        }
+                        
+
+                        $('#removeP-' + index).hide();
+                        $('#addP-' + index).addClass('addP');
+
+                        for(let i = 0; i<active.length; i++){
+                            $('#addP-' + active[i]).hide();
+                            $('#removeP-' + active[i]).addClass('removeP').removeClass('addP').show();
+                             
+                
+                            
+                        }
+                        
+                        
+
+                        $('#addP-' + index).click(function(){
+                            trip$.participants.push(user.friends[index]);
+
+                            $.ajax({
+                                type:'PATCH',
+                                url:'/trips/'+trip$._id,
+                                contentType:'application/json',
+                                dataType:'json',
+                                data:JSON.stringify({participants:trip$.participants}),
+                                success: function(data){
+                                    localStorage.selected = JSON.stringify(trip$);
+                                    location.reload();
+                                    
+                                }
+                
+                            });
+
+                        
+                        })
+
+                        $('#removeP-' + index).click(function(){
+                            trip$.participants.splice(trip$.participants.indexOf(user.friends[index]),1);
+
+                            $.ajax({
+                                type:'PATCH',
+                                url:'/trips/'+trip$._id,
+                                contentType:'application/json',
+                                dataType:'json',
+                                data:JSON.stringify({participants:trip$.participants}),
+                                success: function(data){
+                                    localStorage.selected = JSON.stringify(trip$);
+                                    location.reload();
+                                }
+                
+                            });
+                        })
+
+                        
                     })
-                })
+
+
+
+
+
+
+
+
+                } else {
+
+                
+
+                    let html = "<div id='allTrips'>";
+                    for(let i = 0; i<tripsOn.length; i++){
+                        html+="<div class='trip'>"+
+                            "<div class='tripName'>" + data[tripsOn[i]].name + "</div>"+
+                            "<button class='edit' id='edit-" + i + "' class='editButton'>Edit</button>"+
+                            "<div class='destinationName'>" + data[tripsOn[i]].destination + "</div>"+
+                            "<button class='remove' id='remove-" + i + "' class='removeButton'>Remove</button>"+
+                        "</div>";
+                        
+                    } 
+                    html+="</div>"
+                    $('#main').html(html);
+
+                    $('.trip').each(function(index){
+                        $("#remove-" + index).click(function(){
+                            console.log(data[tripsOn[index]].participants.length);
+                            for(let i = 0; i<data[tripsOn[index]].participants.length; i++){
+                                if(data[tripsOn[index]].participants[i].email == user.email){
+                                    console.log(data[tripsOn[index]].participants[i].email);
+                                    console.log(user.email);
+                                    data[tripsOn[index]].participants.splice(i,1);
+                                }
+                            }
+                            $.ajax({
+                                type:'PATCH',
+                                url:'/trips/'+data[tripsOn[index]]._id,
+                                contentType:'application/json',
+                                dataType:'json',
+                                data:JSON.stringify({participants:data[tripsOn[index]].participants}),
+                                success: function(data){
+                                    location.reload();
+                                }
+                
+                            });
+                        });
+
+
+                        $("#edit-" + index).click(function(){
+                            var selected = data[tripsOn[index]];
+                            localStorage.selected = JSON.stringify(selected);
+                            location.reload();
+                        });
+
+                    });
+
+                }
             }
             
         }
@@ -120,6 +284,7 @@ window.onload = function(){
                 participants: participants,
                 events: [],
                 budget: [$('#budMin').val(),$('#budMax').val()],
+                finances: [],
                 home: $('#home').val(),
                 destination: $('#destination').val(),
                 preferances: {},
