@@ -5,9 +5,29 @@
         <link rel='stylesheet' href='all.css'>
         <link rel='stylesheet' href='index.css'>
         <script src="https://code.jquery.com/jquery-3.6.0.js"   integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="   crossorigin="anonymous"></script>
-        <script src='index.js'></script>
+        <script src="https://kit.fontawesome.com/6d64bbbc4b.js" crossorigin="anonymous"></script>
     </head>
     <body>
+
+        
+            
+    
+       
+        
+
+        <audio id="carMusic" src="imgs/CARM.mp3" loop="loop">
+
+        </audio>
+        <audio id="nyMusic" src="imgs/NYCM.mp3" loop="loop">
+
+        </audio>
+        <audio id="amMusic" src="imgs/AMSM.mp3" loop="loop">
+
+        </audio>
+        <audio id="jaMusic" src="imgs/JAPM.mp3" loop="loop">
+
+        </audio>
+        
         <div id='nav_bar'>
             <div><a class='nav' href='/'>Home</a></div>
             <div id='trips'></div>
@@ -15,24 +35,127 @@
             <div><a class='nav' href='account.html'>Login</a></div>
         </div>
         <div id='title'>TripMaster</div>
-        <div id='explore'>
-            <div class='feature' id='caribbean'>
-                <img src='imgs/CAR.jpeg'>
-                <h1>The Caribbean</h1>
-            </div>
-            <div class='feature' id='new york'>
-                <img src='imgs/NYC.jpeg'>
-                <h1>New York City</h1>
-            </div>
-            <div class='feature' id='amsterdam'>
-                <img src='imgs/AMS.jpeg'>
-                <h1>Amsterdam</h1>
-            </div>
-            <div class='feature' id='japan'>
-                <img src='imgs/JAP.png'>
-                <h1>Japan</h1>
+        <br>
+        <div id="map">
+
+        </div>
+        <div class = "text-control">
+        <form class = "text-control">
+            <div>
+                <label for="from"><i class="far fa-dot-circle"></i></label>
+                <div>
+                    <input type="text" id="from" placeholder="Origin" class="form-control">
+                </div>
+           </div>
+           <div>
+                <label for="to"><i class="fas fa-map-marker-alt"></i></label>
+                <div>
+                    <input type="text" id="to" placeholder="Destination" class="form-control">
+                </div>
+             </div>
+        </form>
+        
+            <div>
+            <button class="btn btn-info btn-lg " onclick="calcRoute();"><i class="fas fa-map-signs"></i></button>
             </div>
             
+            <div class="holder"onclick="closeDirections()">     
+                <div id="DirPopup" class="popup" style ="display:none" >            
+                    <div id="output">
+                    </div>
+                </div>
+             </div>   
+              
         </div>
+        
+        <div id='explore'>
+            <div class='feature' id='caribbean'>
+                <img src='imgs/CAR4.jpg' onclick="theCaribbean()">  
+                <h1 onclick="theCaribbean()">The Caribbean</h1>
+                
+                  <div class="holder"onclick="closeCaribbean()">     
+                    <div id="CarPopup" class="popup" style ="display:none" >            
+                        <div class="content">Known for sunny skies, clear water, and sandy beaches, the Caribbean is a region of the Americas that comprises the Caribbean Sea,
+                             its surrounding coasts, and its islands. The region lies southeast of the Gulf of Mexico and of the North American mainland, east of Central America, 
+                             and north of South America. If you are dying for an unforgettable weekend at the beach, take a trip to the Caribbean! </div>
+                    <br>
+                    <img src='imgs/CAR5.jpg'>
+                    <br>
+                    <br>
+                    <img src='imgs/CAR6.jpg'>
+                    <br>
+                    <br>
+                    <img src='imgs/CAR7.jpg'>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <div class='feature' id='new york'>
+                <img src='imgs/NYC8.jpg' onclick="NewYork()">
+                <h1 onclick="NewYork()">New York City</h1>
+
+                <div class="holder"onclick="closeNewYork()">     
+                    <div id="NYPopup" class="popup" style ="display:none" >            
+                        <div class="content">Bustling with night life, bright lights, and high rises, New York City is the most populous city in the United States. It is also the financial capital of the U.S., as 
+                            it is home to the nation's stock market and Wall Street. If you want to see famous sights like the Statue of Liberty, or have an adventure in the city that never sleeps, take a trip to New York City!</div>
+                            <br>
+                            <img src='imgs/NYC5.jpg'>
+                            <br>
+                            <br>
+                            <img src='imgs/NYC6.jpg'>
+                            <br>
+                            <br>
+                            <img src='imgs/NYC7.jpg'>
+                    </div>
+                </div>
+            </div>
+            <div class='feature' id='amsterdam'>
+                <img src='imgs/AMS4.jpg' onclick="Amsterdam()">
+                <h1 onclick="Amsterdam()">Amsterdam</h1>
+
+                <div class="holder"onclick="closeAmsterdam()">     
+                    <div id="AMPopup" class="popup" style ="display:none" >            
+                        <div class="content">A cultural and financial capital of the Netherlands and all of Europe, Amsterdam is a city rich with history and novel experiences.
+                            If you book a trip to Amsterdam, make sure you check out the historic canals, Van Gogh Museum, and if you're old enough, the red-light district! 
+                        </div>
+                            <br>
+                            <img src='imgs/AMS8.jpg'>
+                            <br>
+                            <br>
+                            <img src='imgs/AMS6.jpg'>
+                            <br>
+                            <br>
+                            <img src='imgs/AMS5.jpg'>
+                    </div>
+                </div>
+            </div>
+
+            <div class='feature' id='japan'>
+                <img src='imgs/JAP6.jpg' onclick="Japan()">
+                <h1 onclick="Japan()">Japan</h1>
+                <div class="holder"onclick="closeJapan()">     
+                    <div id="JAPopup" class="popup" style ="display:none" >            
+                        <div class="content">Japan is one of Earth's most densely populated and urbanized nation's, and also produces some of the most recognizable technology, art, 
+                            and cuisine. If you want hop around some of Japan's 6852 islands, experience the majesty of Mount Fuji, or just soak in the lights of Tokyo, book your trip to Japan today!
+                        </div>
+                            <br>
+                            <img src='imgs/JAP3.jpg'>
+                            <br>
+                            <br>
+                            <img src='imgs/JAP4.jpg'>
+                            <br>
+                            <br>
+                            <img src='imgs/JAP5.jpg'>
+                    </div>
+                </div>
+            </div>
+
+            
+            
+        </div>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9N1a4Knte2eMJxIcafqnV442dDBBa9AU&libraries=places"></script>
+        <script src='index.js'></script>
     </body>
 </html>
