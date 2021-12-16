@@ -27,8 +27,10 @@ window.onload = function(){
             } else {
 
                 if('selected' in localStorage){
+                    let active = null;
                     let html="";
                     var trip$ = JSON.parse(localStorage.selected);
+                    $('#trips_logo').html(trip$.name); 
                     document.getElementById('main').style.backgroundColor = "transparent";
                     html+="<div id='EDIT'>"+
                         "<div id='left'>";
@@ -60,7 +62,13 @@ window.onload = function(){
                                     html+="<div id='noMoney'>You have no financial entries</div>";
 
                                 } else {
-
+                                    for(let i = 0; i<trip$.finances.length; i++){
+                                        for(let k = 0; k<trip$.finances[i].people.length; k++){
+                                            html+="<div class='entry'>"+
+                                                "<div>"+trip$.finances[i].people[k].person.firstName+ " owes " + trip$.finances[i].payer.firstName + " $" + trip$.finances[i].people[k].owes + " for " + trip$.finances[i].people[k].reason + "</div>" +
+                                            "</div>";
+                                        }
+                                    }
                                 }
                             html+="</div><hr>";
 
@@ -68,7 +76,7 @@ window.onload = function(){
                                 html+="<label>How much did I pay?</label><input type=number id='bill'><br>"+
                                 "<label>What was it for?</label><input type=text id='bill_desc'><br>";
 
-                                let active = [];
+                                active = [];
                                 for(let i = 0; i<user.friends.length; i++){
                                     for(let k = 0; k<trip$.participants.length; k++){
                                         if(user.friends[i].email == trip$.participants[k].email){
@@ -86,9 +94,9 @@ window.onload = function(){
 
                                     "</div>";
                                     
-                        
-                                    
+                    
                                 }
+                                html+="<button id='makeNewFinance'>Create</button>"
                                 
 
                             html+="</div>";
@@ -109,7 +117,45 @@ window.onload = function(){
                     $('#back').click(function(){
                         localStorage.removeItem('selected');
                         location.reload();
-                    })
+                    });
+
+                    $('#makeNewFinance').click(function(){
+                        let newFinancialEntry = {
+                            payer: {
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                email: user.email
+                            },
+                            people: []
+                        }
+                        for(let i = 0; i<active.length; i++) {
+                            
+                                newFinancialEntry.people.push({
+                                    person: user.friends[i],
+                                    amount: $('#bill').val(),
+                                    reason: $('#bill_desc').val(),
+                                    owes: $('#owes-' + i).val()
+                                })
+                            
+                            
+                        }
+
+                        trip$.finances.push(newFinancialEntry);
+
+                        $.ajax({
+                            type:'PATCH',
+                            url:'/trips/'+trip$._id,
+                            contentType:'application/json',
+                            dataType:'json',
+                            data:JSON.stringify({finances:trip$.finances}),
+                            success: function(data){
+                                localStorage.selected = JSON.stringify(trip$);
+                                location.reload();
+                                
+                            }
+            
+                        });
+                    });
 
                     $('.alterFriend').each(function(index){
                         
