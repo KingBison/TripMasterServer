@@ -6,6 +6,7 @@ const trip = new mongoose.Schema({
     participants: {type:Array},
     events: {type:Array},
     budget: {type:Array},
+    finances: {type:Array},
     home: {type:String},
     destination: {type:String},
     preferances: {type:Object},

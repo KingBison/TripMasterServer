@@ -96,10 +96,20 @@ window.onload = function(){
                                 
                         html+="</div>";
                         html+="<div id='right'>";
+                                html+="<div class='title'>Options</div>"
+                                html+="<div id='tripOptions'>"+
+                                    "<button id='back'>Back</button>"+
+                                    "<button id='complete'>Complete Trip</button>"+
+                                    "<hr>";
                         html+="</div>";
                     html+="</div>";
 
                     $('#main').html(html);
+
+                    $('#back').click(function(){
+                        localStorage.removeItem('selected');
+                        location.reload();
+                    })
 
                     $('.alterFriend').each(function(index){
                         

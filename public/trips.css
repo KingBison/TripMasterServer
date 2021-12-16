@@ -143,5 +143,23 @@ h2{
 }
 
 #newFinancialEntry label, div{
-    font-size: 20px;;
+    font-size: 20px;
+}
+
+#tripOptions{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+#tripOptions button{
+    margin:25px;
+    font-size: 24px;
+}
+
+#complete{
+    background-color: blue;
+}
+
+#back{
+    background-color: red;
 }

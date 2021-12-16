@@ -18,6 +18,7 @@ router.post('/', async (req, res) => {
         participants: req.body.participants,
         events: req.body.events,
         budget: req.body.budget,
+        finances: req.body.finances,
         home: req.body.home,
         destination: req.body.destination,
         preferances: req.body.preferances
