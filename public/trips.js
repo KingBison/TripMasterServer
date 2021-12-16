@@ -27,9 +27,20 @@ window.onload = function(){
             } else {
 
                 if('selected' in localStorage){
+                    var trip$ = JSON.parse(localStorage.selected);
+                    let found = false;
+                    for(let i = 0; i<data.length; i++){
+                        if(data[i]._id == trip$._id){
+                            found = true;
+                            trip$ = data[i];
+                        }
+                    }
+                    if(!found){
+                        alert('fail');
+                    }
                     let active = null;
                     let html="";
-                    var trip$ = JSON.parse(localStorage.selected);
+                    
                     $('#trips_logo').html(trip$.name); 
                     document.getElementById('main').style.backgroundColor = "transparent";
                     html+="<div id='EDIT'>"+
@@ -104,15 +115,49 @@ window.onload = function(){
                                 
                         html+="</div>";
                         html+="<div id='right'>";
-                                html+="<div class='title'>Options</div>"
-                                html+="<div id='tripOptions'>"+
-                                    "<button id='back'>Back</button>"+
-                                    "<button id='complete'>Complete Trip</button>"+
-                                    "<hr>";
+                            html+="<div class='title'>Options</div>"
+                            html+="<div id='tripOptions'>"+
+                                "<button id='back'>Back</button>"+
+                                "<button id='complete'>Complete Trip</button>"+
+                                
+                            "</div><hr>";
+                            html+="<div class='title'>Events</div>";
+                            html+="<div id='newEvent'>"+
+                                "<label>New Event Name</label><input type='text' id='newEventName'>"+
+                                "<label>New Event Location</label><input type='text' id='newEventLocation'>"+
+                                "<label>New Event Start Time</label><input type='datetime-local' id='newEventStart'>"+
+                                "<label>New Event End Time</label><input type='datetime-local' id='newEventEnd'>"+
+                                "<button id='makeNewEvent'>Create</button>";
+                                
+                            html+="</div><hr>"+
+                            "<div id='events>"+
+
+                            "</div>"+
+
+                        "</div>"
+                                
                         html+="</div>";
                     html+="</div>";
 
                     $('#main').html(html);
+
+                    var optionsEstablishments = {
+                        types: ['establishment']
+                    }
+
+                    var eventInput = document.getElementById("newEventLocation");
+                    var autoComplete1 = new google.maps.places.Autocomplete(eventInput, optionsEstablishments);
+
+                    $('#makeNewEvent').click(function(){
+                        var eventInfo = {
+                            name: $('#newEventName').val(),
+                            location: $('#newEventLocation').val(),
+                            start: $('#newEventStart').val(),
+                            end: $('#newEventEnd').val(),
+                        }
+
+                        console.log(eventInfo);
+                    })
 
                     $('#back').click(function(){
                         localStorage.removeItem('selected');
