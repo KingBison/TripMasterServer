@@ -11,10 +11,6 @@ window.onload = function(){
         dataType: 'json',
         url: '/trips',
         success: function(data){
-
-            
-
-
             let tripsOn = [];
             for(let i = 0; i<data.length; i++){
                 for(let k = 0; k<data[i].participants.length; k++){
@@ -26,7 +22,46 @@ window.onload = function(){
 
             if(tripsOn.length == 0){
                 $('#main').html("<div id='noTrips'>You have not made any trips</div>");
+            } else {
+                let html = "<div id='allTrips'>";
+                for(let i = 0; i<tripsOn.length; i++){
+                    html+="<div class='trip'>"+
+                        "<div class='tripName'>" + data[i].name + "</div>"+
+                        "<button class='edit' id='edit-" + i + "' class='editButton'>Edit</button>"+
+                        "<div class='destinationName'>" + data[i].destination + "</div>"+
+                        "<button class='remove' id='remove-" + i + "' class='removeButton'>Remove</button>"+
+                    "</div>";
+                    
+                } 
+                html+="</div>"
+                $('#main').html(html);
+
+                $('.trip').each(function(index){
+                    $("#remove-" + index).click(function(){
+                        console.log(data[tripsOn[index]].participants.length);
+                        for(let i = 0; i<data[tripsOn[index]].participants.length; i++){
+                            if(data[tripsOn[index]].participants[i].email == user.email){
+                                console.log(data[tripsOn[index]].participants[i].email);
+                                console.log(user.email);
+                                data[tripsOn[index]].participants.splice(i,1);
+                            }
+                        }
+                        $.ajax({
+                            type:'PATCH',
+                            url:'/trips/'+data[tripsOn[index]]._id,
+                            contentType:'application/json',
+                            dataType:'json',
+                            data:JSON.stringify({participants:data[tripsOn[index]].participants}),
+                            success: function(data){
+                                location.reload();
+                                
+                            }
+            
+                        });
+                    })
+                })
             }
+            
         }
     });
 
@@ -68,6 +103,12 @@ window.onload = function(){
 
         $('#create').click(function(){
             var participants = [];
+            participants.push({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+            })
+            alert('check');
             for(let i = 0; i<user.friends.length; i++){
                 if($("#friend-" + i).is(':checked')){
                     participants.push(user.friends[i]);

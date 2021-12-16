@@ -66,3 +66,28 @@ h2{
 #create{
     background-color: green;
 }
+
+#allTrips{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.trip{
+    border: 3px solid black;
+    margin: 20px;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 50% 50%;
+}
+
+.trip button{
+    margin:15px;
+}
+
+.edit{
+    background-color: yellow;
+}
+
+.remove{
+    background-color: red;
+}
